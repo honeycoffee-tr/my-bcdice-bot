@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta property="og:title" content="discord-bcdicebot" />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://shunshun94.github.io/discord-bcdicebot/ogp.png" />
+<meta property="og:site_name" content="https://shunshun94.github.io/discord-bcdicebot/index.html" />
+<meta property="og:description" content="Discord 上で多数のシステムに対応しているダイスボット BCDice を振れるようにする Bot" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@Shunshun94" />
+<meta name="twitter:domain" content="shunshun94.github.io" />
+<meta name="twitter:title" content="discord-bcdicebot" />
+<meta name="twitter:description" content="Discord 上で多数のシステムに対応しているダイスボット BCDice を振れるようにする Bot" />
+<meta name="twitter:image" content="https://shunshun94.github.io/discord-bcdicebot/ogp.png" />
+<title>discord-bcdicebot</title>
+	<style type="text/css">
+
+		body > * {
+			width: 70%;
+			margin-left:15%;
+		}
+		
+		h2 {
+			border-left: 24px double green;
+			border-bottom: 4px solid green;
+			padding-left: 4px;
+		}
+		h3 {
+			border-left: 12px double green;
+			border-bottom: 2px solid green;
+			padding-left: 4px;
+		}
+		
+		pre {
+			margin-top:4px;
+			margin-bottom:4px;
+			padding-left:20px;
+		}
+
+		td {
+			padding:4px;
+		}
+
+		.comment {
+			background-color:#FFFFDD;
+			padding:8px;
+		}
+		
+		.needToEdit {
+			color:green;
+		}
+		#indexes {
+			font-size:80%;
+		}
+	</style>
+</head>
+<body>
+<h1>discord-bcdicebot</h1>
+<h2 id="index">目次</h2>
+<div id="indexes"><a href="#index">目次</a><br/>
+<a href="#outline">概要</a><br/>
+<a href="#requirements">必要なもの</a><br/>
+　<a href="#requirements-java">Java 8 ないしそれ以降の実行環境</a><br/>
+　<a href="#requirements-bcdice-api">BCDice-API サーバ</a><br/>
+<a href="#install">サーバに導入する手順</a><br/>
+　<a href="#install-outline">概要</a><br/>
+　<a href="#install-addDiceBotToDiscordServer">詳細1. ダイスボットを登録し、サーバに導入する</a><br/>
+　<a href="#install-editStartFile">詳細2. start.bat または start.sh を編集する</a><br/>
+　<a href="#install-executeStartFile">詳細3. start.bat または start.sh を実行する</a><br/>
+　<a href="#install-troubleShooting">なんか動かない……</a><br/>
+<a href="#howToUse">利用する</a><br/>
+　<a href="#howToUse-roll">ダイスを振る</a><br/>
+　<a href="#howToUse-config">設定を変更する</a><br/>
+　<a href="#howToUse-admin">管理コマンドを使う</a><br/>
+　<a href="#howToUse-slashCommands">スラッシュコマンドについて</a><br/>
+<a href="#heroku">中級者以上向け：heroku を使って動かす手順</a><br/>
+<a href="#contact">連絡先</a><br/>
+　<a href="#contact-report">バグ報告など</a><br/>
+　<a href="#contact-donate">寄付先</a><br/>
+<a href="#licenses">ライセンス</a><br/>
+　<a href="#licenses-libs">使用しているライブラリ</a><br/>
+　<a href="#licenses-services">利用しているサービス</a><br/>
+　<a href="#licenses-thisone">本アプリのライセンス</a><br/>
+<a href="#faq">Q&A</a><br/>
+　<a href="#faq01">質問・バグ報告はどこに</a><br/>
+　<a href="#faq02">ダイスを振った時にメンションしてほしいんだけど</a><br/>
+　<a href="#faq03">ダイスを振るコマンド以外を入力すると [ERROR][500] ～ って出る。設定は合っているはずなのに</a><br/>
+　<a href="#faq04">管理用のパスワードはどこ？</a><br/>
+　<a href="#faq05">スラッシュコマンドを有効にしてダイスボットを起動したのだけれどもスラッシュコマンドがサジェストされない</a><br/>
+　<a href="#faq06">Version 2? Version 1 との差異として気を付けるべき点は何？</a><br/>
+　<a href="#faq07">Version 1 を使いたいのだけれども</a><br/>
+　<a href="#faq08">なんで Java なの。Ruby とか○○とかじゃないの</a><br/>
+　<a href="#faq09">じゃあ単体実行できるバイナリでいいじゃん</a><br/>
+<a href="#acknowledgments">謝辞</a><br/>
+　<a href="#acknowledgments-people">お世話になった方々</a><br/>
+　<a href="#acknowledgments-relatedApps">関連アプリの紹介</a><br/>
+<a href="#history">更新履歴</a></div>
+<h2 id="outline">概要</h2>
+<p>Discord で BCDice を使うための bot です。各サーバに対して、ユーザが導入して利用します。</p>
+<p><a class="download">DOWNLOAD</a></p>
+<h2 id="requirements">必要なもの</h2>
+<p>このアプリは Discord のチャットに参加するユーザのうち、1人の環境で動かす必要があります。動かす人には以下の準備が求められます</p>
+<h3 id="requirements-java">Java 8 ないしそれ以降の実行環境</h3>
+<p>Java 実行環境 のインストール方法は <a href="https://www.java.com/ja/download/help/download_options.xml">Javaをインストールするには</a> をご覧ください。</p>
+
+<h3 id="requirements-bcdice-api">BCDice-API サーバ</h3>
+<p><a href="https://github.com/NKMR6194/bcdice-api">BCDice-API</a> が動作しているサーバを用意してください。ローカルでも構いませんし、貸してくれる人から借りてもかまいません。</p>
+
+<div class="comment">
+<p>BCDice-API サーバを自分で構築するのは一定の専門知識が必要です。
+独自のダイスボットを追加するのでなければ、<a href="https://api-status.bcdice.org/" target="_blank">https://api-status.bcdice.org/</a> に記載されている公開サーバを利用する方が良いでしょう。
+各公開サーバには利用ルールがあるため、利用前に事前にご確認ください。</p>
+<p>また、中級者向けに Heroku を用いての自分用 BCDice-API サーバの設置手順も共有されています。<br/><a href="https://github.com/ysakasin/bcdice-api/blob/master/docs/heroku.md">https://github.com/ysakasin/bcdice-api/blob/master/docs/heroku.md</a></p>
+</div>
+
+<h2 id="install">サーバに導入する手順</h2>
+
+<div class="comment">
+<p>導入手順を画像付きで分かりやすくまとめた記事を<a href="https://twitter.com/aimsssssot">えいむさん</a>が書いてくださっています。<br/>
+必要に応じてこちらも読むことをおすすめします。<br/>
+<a href="https://aimsot.net/discord_dicebot/">https://aimsot.net/discord_dicebot/</a></p>
+</div>
+
+<h3 id="install-outline">概要</h3>
+<ol>
+	<li>Discord の<a href="https://discordapp.com/developers/applications/me">開発者ページ</a>からダイスボットを作成しサーバに導入する</li>
+	<li><a class="download">DOWNLOAD</a> から Discord-Bcdicebot をダウンロードし、start.bat ないし start.sh に Bot の Token 情報と BCDice-API の情報を記入する</li>
+	<li>start.bat ないし start.sh を実行する</li>
+</ol>
+
+<h3 id="install-addDiceBotToDiscordServer">詳細1. ダイスボットを登録し、サーバに導入する</h3>
+<p>Discord に新規の Bot を作成します。サーバに導入するため、サーバ管理者がこれを実行することになるでしょう。</p>
+<ol>
+	<li><a href="https://discordapp.com/developers/applications/me">開発者ページ</a> にアクセスし、画面右上の New Application をクリックします</li>
+	<li>名前とアイコンを設定し、Discord Application を作成します</li>
+	<li>名前とアイコンの下にある APPLICATION ID の数字をメモします</li>
+	<li>画面左側のメニューから Bot を選択し、Add Bot と書かれたボタンをクリックし、このダイスボット用のユーザを作成します</li>
+	<li>Bot の画面中にある <code>MESSAGE CONTENT INTENT</code> を ON にします<br/>
+	<span style="display:block;" class="comment"><code>MESSAGE CONTENT INTENT</code>の設定はスラッシュコマンドでしか利用しない予定であれば不要です。<br/>通常のテキストチャットで利用したい場合は必要となります。</span></li>
+	<li>Bot の Username の下に "Token:click to reveal" というのがあるのでクリックし、出てくるランダムな文字列をメモします。<strong>この文字列は他の人に教えないこと</strong>。
+	<br/><span style="display:block;" class="comment">この文字列は <code>NDA0MgAIC0QK18lU0dxMt99F.HuWAIt.Nh9OTLbjxdMp3pcmw3Lsqd4aQlb</code> のような形式の値となります（この値はダミーです）。<br/>
+	General Information 記載の <code>d70963bg6e4df564f3648c87c514f15bef8ce3b38af1156800bcc3395c062f80</code> のような値ではありません。</span></li>
+	<li>次の URL にアクセスします<br/><strong>https://discordapp.com/oauth2/authorize?client_id=<span class="needToEdit">[Client Id の数字]</span>&amp;scope=bot&amp;permissions=0</strong></li>
+	<li>アクセスした画面から Bot を導入できるので、入れたいサーバに Bot を導入します</li>
+</ol>
+
+<h3 id="install-editStartFile">詳細2. start.bat または start.sh を編集する</h3>
+<p><a class="download">DOWNLOAD</a> から Discord-Bcdicebot をダウンロードし、解凍します。<br/>
+その上で同梱されている start.bat を以下のように編集します（Linux/macOS を使っている方は以下を参考に start.sh を編集してください）。</p>
+<pre>@echo off
+cd /d %~dp0
+
+set DISCORD_BOT_TOKEN=<strong class="needToEdit">詳細1.の5で得たランダムな文字列</strong>
+set BCDICE_API_URL=<strong class="needToEdit">BCDice-APIサーバのURL</strong>
+set IGNORE_ERROR=
+set BCDICE_PASSWORD=<strong class="needToEdit">管理用のパスワード。ここに入れた文字列がパスワードとして設定される</strong>
+set BCDICE_API_SECONDARY=<strong class="needToEdit">予備のBCDice-APIサーバのURL</strong>
+REM set BCDICE_DEFAULT_SYSTEM=DiceBot
+REM set BCDICE_MENTION_MODE=1
+REM set BCDICE_RESULT_DISPLAY_FORMAT=V1
+REM set BCDICE_SLASH_PREFIX=bcdice
+REM set BCDICE_SLASH_SHORT_PREFIX=br
+REM set BCDICE_STANDARD_INPUT_DISABLED=disabled
+REM set BCDICE_SLASH_TABLE_SUGGESTION_DISABLED=disabled
+
+java -jar discord-bcdicebot.jar %DISCORD_BOT_TOKEN% %BCDICE_API_URL% %IGNORE_ERROR%
+pause</pre>
+
+<div class="comment"><code>BCDICE_PASSWORD</code> と <code>BCDICE_API_SECONDARY</code> の行の先頭には
+編集を始めた時点では REM という文字列があるのでこれは削除してください。
+<br/>なお、start.sh を編集する際は REM ではなく # を消すと上手くいきます</div>
+
+<p><code>BCDICE_API_URL</code> と <code>BCDICE_API_SECONDARY</code> の右に入力する値は<a href="https://api-status.bcdice.org/" target="_blank">https://api-status.bcdice.org/</a> に記載されている公開サーバを利用する方が良いでしょう。
+各公開サーバには利用ルールがあるため、利用前に事前にご確認ください。</p>
+
+<div class="comment">
+<p>各パラメータは以下のような意味を持ちます。</p>
+<table border="1">
+	<tr>
+		<th>DISCORD_BOT_TOKEN</th>
+		<td>必須です。Discord の Bot アカウントに接続するための情報です</td>
+	</tr>
+	<tr>
+		<th>BCDICE_API_URL</th>
+		<td>必須です。ダイスを振るための BCDice-API サーバの URL です</td>
+	</tr>
+	<tr>
+		<th>IGNORE_ERROR</th>
+		<td>ダイスを振るコマンド以外を入力した場合に BCDice-API サーバが 500 エラーを返す場合にそれを無視するか否かを設定します。これの値を1にすることでエラーを無視するようになります</td>
+	</tr>
+	<tr>
+		<th>BCDICE_PASSWORD</th>
+		<td>管理用パスワードです。入力しなかった場合、起動のたびにランダムな値がパスワードとして設定されます</td>
+	</tr>
+	<tr>
+		<th>BCDICE_API_SECONDARY</th>
+		<td>BCDICE_API_URL で設定した BCDice-API サーバが何らかの都合で使えない場合に利用される代替のサーバの URL です</td>
+	</tr>
+	<tr>
+		<th>BCDICE_DEFAULT_SYSTEM</th>
+		<td>部屋ごとにシステムを設定していない場合に使われるシステムです。設定しない場合は DiceBot が使われます。先頭の REM ないし # を削除しなければ有効になりません</td>
+	</tr>
+	<tr>
+		<th>BCDICE_MENTION_MODE</th>
+		<td>ダイスを振った際の結果に振った人へのメンションするか否かを設定します。これの値を1にすることでメンションするようになります。先頭の REM ないし # を削除しなければ有効になりません</td>
+	</tr>
+	<tr>
+		<th>BCDICE_RESULT_DISPLAY_FORMAT</th>
+		<td>ダイスを振った結果の表示を設定します。これの値を V1 にすることで旧表示に戻し、ダイスの結果にシステム名も記載されます。先頭の REM ないし # を削除しなければ有効になりません</td>
+	</tr>
+	<tr>
+		<th>BCDICE_SLASH_PREFIX</th>
+		<td>スラッシュコマンドを有効にします。ここに入力された値がスラッシュコマンドの接頭語となります。先頭の REM ないし # を削除しなければ有効になりません</td>
+	</tr>
+	<tr>
+		<th>BCDICE_SLASH_SHORT_PREFIX</th>
+		<td>ダイスを振る場合に用いるスラッシュコマンドの短縮ワードを設定します。スラッシュコマンドが有効な場合にのみ有効です。入力しなかった場合、br が接頭語に設定されます。先頭の REM ないし # を削除しなければ有効になりません</td>
+	</tr>
+	<tr>
+		<th>BCDICE_STANDARD_INPUT_DISABLED</th>
+		<td>この値に何らかの文字列が入っている場合、スラッシュコマンド以外の手段で設定やダイスロールを行うことができなくなります。先頭の REM ないし # を削除しなければ有効になりません</td>
+	</tr>
+	<tr>
+		<th>BCDICE_SLASH_TABLE_SUGGESTION_DISABLED</th>
+		<td>この値に何らかの文字列が入っている場合、スラッシュコマンドを用いた際のオリジナル表のサジェストが機能しません</td>
+	</tr>
+</table>
+</div>
+
+<h3 id="install-executeStartFile">詳細3. start.bat または start.sh を実行する</h3>
+<p>先に編集した start.bat をダブルクリックすることでダイスボットが起動します。黒い背景に白い文字が出ているウィンドウが表示され、そこにダイスボットの実行ログが表示されます。</p>
+<p>ダイスボットを終了する時は表示されているウィンドウを消すか、キーボードの Ctrl+C を押してください。</p>
+
+<h3 id="install-troubleShooting">なんか動かない……</h3>
+<p>Windows 環境の方は同梱してある validate.bat をダブルクリックすることで何が問題なのか確認するツールが動作します。
+それでもわからない場合は validate.bat の結果を後述の "質問・バグ報告はどこに" 記載の連絡先に送ってください。</p>
+
+<h2 id="howToUse">利用する</h2>
+
+<div class="comment">
+	<p>利用手順を画像付きで分かりやすくまとめた記事を<a href="https://twitter.com/aimsssssot">えいむさん</a>が書いてくださっています。<br/>
+	必要に応じてこちらも読むことをおすすめします。<br/>
+	<a href="https://aimsot.net/discord_dicebot02/">https://aimsot.net/discord_dicebot02/</a></p>
+</div>
+
+<h3 id="howToUse-roll">ダイスを振る</h3>
+<p><code>BCDICE_STANDARD_INPUT_DISABLED</code>が設定されていない場合、<br/>チャットに BCDice のコマンドを書き込めばダイスが振られます。<br/>
+例えば <code>2d6</code> 等と書き込めばサイコロを2つ振った合計値が得られます。<br/>
+どのようなコマンドが利用できるのかは <a href="https://docs.bcdice.org/">BCDice コマンドリスト</a>をご参照ください。</p>
+<p>BCDice にはない独自の振り方として、<code>[</code>と<code>]</code>でカンマ区切りのリストを与えるとそのリストのそれぞれについてダイスを振ることができます。<br/>
+例えば<code>[こぶた,たぬき,きつね,ねこ] 2d6</code> とすることでこぶた、たぬき、きつね、ねこのそれぞれについて 2d6 を振ることが可能です。</p>
+
+<p><code>BCDICE_SLASH_PREFIX</code>が有効な場合はスラッシュコマンドでダイスを振る際に同様の記法を用いることが可能です。<br/>
+例えば、<code>BCDICE_SLASH_PREFIX</code>の値が<code>bcdice</code>ならば<br/>
+<code>/bcdice roll 2d6</code>や<code>/bcdice roll [こぶた,たぬき,きつね,ねこ] 2d6</code>等とすればダイスを振ることが可能です。</p>
+
+<h3 id="howToUse-config">設定を変更する</h3>
+<p><code>BCDICE_STANDARD_INPUT_DISABLED</code>が設定されていない場合、<br/>以下のような設定をチャットに書き込むことで実施できます。</p>
+<table border="1">
+	<tr>
+		<td><code>bcdice list</code></td>
+		<td>利用できるダイスボットのシステムを一覧します</td>
+		<td>-</td>
+	</tr>
+	<tr>
+		<td><code>bcdice set [利用するシステムの名前]</code></td>
+		<td>そのテキストチャンネルで利用するダイスボットのシステムを指定します。この設定はテキストチャンネル毎に保持されます。利用できるシステムは<code>bcdice list</code>でご確認ください</td>
+		<td><code>bcdice set SwordWorld2.5</code><br/>ダイスボットの設定をソードワールド2.5にする</td>
+	</tr>
+	<tr>
+		<td><code>bcdice help [利用するシステムの名前]</code></td>
+		<td>そのダイスボットのシステムのコマンドに関するヘルプを表示します。利用できるシステムは<code>bcdice list</code>でご確認ください</td>
+		<td><code>bcdice help SwordWorld2.5</code><br/>ソードワールド2.5のダイスボットで何をできるのか確認する</td>
+	</tr>
+	<tr>
+		<td><code>bcdice status</code></td>
+		<td>現在利用しているダイスサーバと、このコマンドが打たれたテキストチャンネルで利用されているダイスボットのシステムを出力します</td>
+		<td>-</td>
+	</tr>
+	<tr>
+		<td><code>bcdice help</code></td>
+		<td>discord-bcdicebot 自体のヘルプを呼び出します</td>
+		<td>-</td>
+	</tr>
+</table>
+<p>例えば CoC 7版のダイスボットを使いたい時は使いたいテキストチャンネルで<code>bcdice set Cthulhu7th</code>と入力し、ダイスボットのシステムを CoC 7版のものに設定します。<br/>
+その上で<code>CC<=25 【目星】</code>等と書き込めば CoC 7版の判定ができます。</p>
+
+<div class="comment">
+set コマンドを実行すると<code>start.bat</code>ないし<code>start.sh</code>と同じディレクトリにある<code>BCDiceConfiguration</code>ディレクトリ内のファイルに
+どの部屋がどのシステムを使っているのかが保存されます。 次の起動時は保存された情報に基づいて部屋ごとのシステムを設定します
+</div>
+
+<p><code>BCDICE_SLASH_PREFIX</code>が有効な場合はスラッシュコマンドでダイスを振る際に同様の記法を用いることが可能です。<br/>
+詳細はスラッシュコマンドの説明をご確認ください。</p>
+
+<h3 id="howToUse-admin">管理コマンドを使う</h3>
+<p><code>BCDICE_STANDARD_INPUT_DISABLED</code>が設定されていない場合、<br/>以下のような設定をチャットに書き込むことで実施できます。
+<br/>パスワードは <code>start.bat</code> ないし <code>start.sh</code> で設定した <code>BCDICE_PASSWORD</code> の値を用いてください。</p>
+<table border="1">
+	<tr>
+		<td><code>bcdice admin [パスワード] listServer</code></td>
+		<td>discord-bcdicebot が参照する BCDice-API サーバの一覧を表示します。1個以上のサーバの URL が出力されます。
+もし、その時点で利用している BCDice-API サーバが利用できなかった場合、一覧に表示された別のサーバを discord-bcdicebot は利用します</td>
+		<td><code>bcdice admin myPassw0rd listServer</code><hr/>出力例<pre>
+https://bcdice.onlinesession.app/
+https://bcdice.trpg.net/</pre></td>
+	</tr>
+	<tr>
+		<td><code>bcdice admin [パスワード] setServer [BCDice-APIサーバのURL]</code></td>
+		<td>discord-bcdicebot が利用する BCDice-API サーバを変更します。
+discord-bcdicebot が参照する BCDice-API サーバの一覧に変更後のサーバがなかった場合、変更後のサーバを一覧に追加します</td>
+		<td><code>bcdice admin myPassw0rd setServer https://bcdice.onlinesession.app</code></td>
+	</tr>
+	<tr>
+		<td><code>bcdice admin [パスワード] removeServer [BCDice-APIサーバのURL]</code></td>
+		<td>discord-bcdicebot が参照する BCDice-API サーバの一覧からサーバを削除します。
+現在使っているサーバを削除した場合、一覧に存在する別のサーバを利用するように設定は変更されます</td>
+		<td><code>bcdice admin myPassw0rd removeServer https://bcdice.onlinesession.app</code></td>
+	</tr>
+
+	<tr>
+		<td><code>bcdice admin [パスワード] export</code></td>
+		<td>全テキストチャンネルについてどのダイスボットのシステムを利用しているのか出力します</td>
+		<td><code>bcdice admin myPassw0rd export</code><hr/>出力例<pre>
+Room-System List
+655334231928733699:SwordWorld2.5
+768400929514061826:SwordWorld2.0
+665445513117564962:SwordWorld2.5
+643025877055176707:DoubleCross
+general:DiceBot
+		</pre></td>
+	</tr>
+	<tr>
+		<td><code>bcdice admin [パスワード] import</code></td>
+		<td>複数のテキストチャンネルについてどのダイスボットのシステムを利用するのかを設定します。export の出力結果をそのまま使うことができます。
+		</td>
+		<td><pre>bcdice admin myPassw0rd import
+655334231928733699:SwordWorld2.5
+768400929514061826:SwordWorld2.0
+665445513117564962:SwordWorld2.5
+643025877055176707:DoubleCross</pre></td>
+	</tr>
+	<tr>
+		<td><code>bcdice admin [パスワード] updateDiceRollPreFix</code></td>
+		<td>テキストチャンネルに入力された発言がダイスコマンドであるか否かのチェックを行うための情報を更新します。BCDice-API サーバが更新された直後などに使用することで最新のダイスコマンドを利用可能にすることができます</td>
+		<td><code>bcdice admin myPassw0rd updateDiceRollPreFix</code></td>
+	</tr>
+	<tr>
+		<td><code>bcdice admin [パスワード] suppressroll</code></td>
+		<td>テキストチャンネルに入力された発言のうち、ダイスコマンドであると思われるものを判断して BCDice-API サーバに送信するように設定します。これがデフォルトの挙動です</td>
+		<td><code>bcdice admin myPassw0rd suppressroll</code></td>
+	</tr>
+	<tr>
+		<td><code>bcdice admin [パスワード] suppressroll [/ で始まる文字列]</code></td>
+		<td>テキストチャンネルに入力された発言のうち、先頭が指定した任意の文字列以外ののみダイスコマンドであると判断して BCDice-API サーバに送信するように設定します</td>
+		<td><code>bcdice admin myPassw0rd suppressroll /r</code></td>
+	</tr>
+	<tr>
+		<td><code>bcdice admin [パスワード] listDiceBot</code></td>
+		<td>後述するオリジナル表を一覧します</td>
+		<td><code>bcdice admin myPassw0rd listDiceBot</code></td>
+	</tr>
+	<tr>
+		<td><code>bcdice admin [パスワード] addDiceBot [追加するオリジナル表の名前]</code></td>
+		<td>オリジナル表を追加します。詳細は後述します</td>
+		<td><code>bcdice admin myPassw0rd addDiceBot 言語表</code></td>
+	</tr>
+	<tr>
+		<td><code>bcdice admin [パスワード] removeDiceBot [削除するオリジナル表の名前]</code></td>
+		<td>オリジナル表を削除します</td>
+		<td><code>bcdice admin myPassw0rd removeDiceBot 言語表</code></td>
+	</tr>
+	<tr>
+		<td><code>bcdice admin [パスワード] refreshSecretDice</code></td>
+		<td>3日以上前に振られたシークレットダイスの情報を削除します</td>
+		<td>-</td>
+	</tr>
+	<tr>
+		<td><code>bcdice admin</code></td>
+		<td>bcdice admin コマンドの discord-bcdicebot 自体のヘルプを呼び出します</td>
+		<td>-</td>
+	</tr>
+	<tr>
+		<td><code>bcdicediscord [パスワード] listServers</code></td>
+		<td>Bot が登録されているサーバの一覧を出力します</td>
+		<td>-</td>
+	</tr>
+	<tr>
+		<td><code>bcdicediscord [パスワード] listRooms</code></td>
+		<td>Bot が登録されているサーバに存在するテキストチャンネルの一覧を取得します</td>
+		<td>-</td>
+	</tr>
+	<tr>
+		<td><code>bcdicediscord [パスワード] listRoomIds</code></td>
+		<td>Bot が登録されているサーバに存在するテキストチャンネルの ID の一覧を取得します</td>
+		<td>-</td>
+	</tr>
+</table>
+
+<div class="comment">
+import コマンドを実行すると<code>start.bat</code>ないし<code>start.sh</code>と同じディレクトリにある<code>BCDiceConfiguration</code>ディレクトリ内のファイルに
+どの部屋がどのシステムを使っているのかが保存されます。 次の起動時は保存された情報に基づいて部屋ごとのシステムを設定します
+</div>
+
+<p><code>BCDICE_SLASH_PREFIX</code>が有効な場合はスラッシュコマンドでダイスを振る際に同様の記法を用いることが可能です。<br/>
+ただし、<code>export</code>、<code>import</code>、<code>suppressroll</code> はスラッシュコマンドからは利用できません。<br/>
+詳細はスラッシュコマンドの説明をご確認ください。</p>
+
+<h4 id="howToUse-admin-originalTable">オリジナル表の管理</h4>
+<p>管理者はオリジナル表を追加することもできます。</p>
+<p>オリジナル表を追加する場合は Discord にオリジナル表の情報をアップロードし、アップロード時のコメントに次のように記載してください。<br/>
+<code>bcdice admin [パスワード] addDiceBot [オリジナル表名]</code><br/>
+追加した後オリジナル表の名前がチャット上で発言されるとオリジナル表が振られます。</p>
+
+<p>オリジナル表を削除する際は以下のようにしてください。<br/><code>bcdice admin [パスワード] removeDiceBot [オリジナル表名]</code><br/>
+オリジナル表の一覧は次のようにすると確認できます。<br/><code>bcdice admin [パスワード] listDiceBot</code></p>
+
+<h5>BCDice コマンド形式の表</h5>
+<p>他のツールと互換性のあるオリジナル表をアップロードすることでそのオリジナル表を利用できます。
+記法は<a href="https://docs.bcdice.org/original_table.html">オリジナル表 · BCDiceコマンドガイド</a>
+ないしは<a href="https://github.com/Shunshun94/discord-bcdicebot/blob/master/originalDiceBots/サンプルダイスボット-夜食表">discord-bcdicebot/originalDiceBots/サンプルダイスボット-夜食表</a>を参照してください。<br/>
+両者でフォーマットが異なりますが、どちらも利用できます。<br/>
+また、追加するダイスボット表は UTF-8 で作成されている必要があります。
+Windows 付属のメモ帳であれば名前を付けて保存する際に保存ボタンの左に「文字コード」を選択できる箇所があります。ここで <code>UTF-8</code> を選択した上で保存してください。</p>
+
+<h5>アクセスポイント URL 形式の表</h5>
+<p>アクセスすることで BCDice API のダイス結果互換の値を返すアクセスポイント（例：<a href="https://shunshun94.github.io/discord-bcdicebot/tools/original_table_sample_result.json" target="_blank">original_table_sample_result.json</a>）を与えることでもオリジナル表を作成できます。<br/>
+返り値には最低限 <code>ok</code> <code>text</code> <code>secret</code> の情報が含まれている必要があります。<br/>
+アップロードするオリジナル表のファイルは1行目にアクセスポイントの URL のみ記載してください（例：<a href="https://shunshun94.github.io/discord-bcdicebot/tools/original_table_sample_file" target="_blank">original_table_sample_file</a>）。</p>
+
+<p>アクセスポイントにアクセスする際、次の URL に対して GET メソッドでアクセスを実施します。<br/>
+<code>${与えた URL}?repeat=${回数}&amp;params=${引数}</code></p>
+<p>例えば <code>https://original_table.example.com/access_point</code> がアクセスポイントで、<br/>
+テキストチャットから次のような入力を実施して該当のオリジナル表を振るとします。<br/>
+<code>x3 URLのオリジナル表 ぱんだ うさぎ こあら</code><br/>
+この場合、次のようにアクセスを実施します。<br/>
+<code>https://original_table.example.com/access_point?repeat=3&amp;params=ぱんだ%20うさぎ%20こあら</code></p>
+
+
+<h3 id="howToUse-slashCommands">スラッシュコマンドについて</h3>
+<p><code>BCDICE_SLASH_PREFIX</code> が有効な場合、Discord のスラッシュコマンド機能を用いてダイスを振ったり設定を実施したりできるようになります。</p>
+
+<h4 id="howToUse-slashCommands-nohelp">スラッシュコマンドの使い方</h4>
+<p>ダイスボット起動後、テキストチャットにスラッシュ（<code>/</code>）を入力すると何ができるのかが表示されます。そちらをご参照ください。</p>
+
+<h4 id="howToUse-slashCommands-installWait">スラッシュコマンドが有効になるには時間がかかります</h4>
+<p>ダイスボットを起動してから1時間前後待たないとスラッシュコマンドは有効になりません。</p>
+<p>ただし、一度 Bot のアプリを起動して導入している各サーバでスラッシュコマンドが有効になれば、次の起動からは起動直後からスラッシュコマンドが利用できます。</p>
+
+<h4 id="howToUse-slashCommands-forAdmin">admin コマンド及び discord コマンドは管理者しか使えません</h4>
+<p>admin コマンドと discord コマンドは管理者しか実行できません。
+従来パスワードを知っていれば誰でも実行できましたが、スラッシュコマンドにおいては Bot の管理者のみ実行できるように変更されました。</p>
+
+<h4 id="howToUse-slashCommands-disabledCommands">スラッシュコマンドで使えない機能</h4>
+<p>上述の通り、管理コマンドの<code>export</code>、<code>import</code>、<code>suppressroll</code>はスラッシュコマンドからは利用できません。</p>
+
+<h4 id="howToUse-slashCommands-remove">スラッシュコマンドを無効化したい場合</h4>
+<p><code>BCDICE_SLASH_PREFIX</code>や<code>BCDICE_SLASH_SHORT_PREFIX</code>の値を変えたい場合は再起動が必要です。<br/>
+しかし、再起動後もスラッシュコマンドの Discord 上でのサジェストは残ってしまいます。<br/>
+そのため、それらの値を変えたり、Bot を長期に渡って止める場合は止める前に<br/><code>discord removeslashcommands</code>のスラッシュコマンドを用いてスラッシュコマンドを削除してください。</p>
+
+
+<h2 id="heroku">中級者以上向け：heroku を使って動かす手順</h2>
+<p>PaaS サービス heroku を使って discord-bcdicebot を動かすことも可能です。<br/>
+月額数ドルを払うことで利用できます。詳細は<a href="https://www.heroku.com/pricing" target="_blank">Heroku Pricing のページ</a>をご参照ください。</p>
+<p>ただし、Git と Heroku を使える必要があり、Heroku については英語で書かれたウェブサイト上での操作が必要となります。</p>
+<ol>
+	<li>Git を導入します。Git： <a target="_blank" href="https://git-scm.com/">https://git-scm.com/</a></li>
+	<li>Heroku のアカウントを作成します。Heroku: <a target="_blank" href="https://www.heroku.com/home">https://www.heroku.com/home</a></li>
+	<li>Heroku CLI を導入します。インストールガイド： <a target="_blank" href="https://devcenter.heroku.com/articles/heroku-cli">https://devcenter.heroku.com/articles/heroku-cli</a></li>
+	<li>GitHub からソースコードを clone してきます。URL は <code>git@github.com:Shunshun94/discord-bcdicebot.git</code></li>
+	<li>clone してきたディレクトリ内で <code>heroku login</code> を実行し、ログインします</li>
+	<li>clone してきたディレクトリ内で <code>heroku create</code> を実行し、heroku 上に App を作成します</li>
+	<li>clone してきたディレクトリ内で <code>git push heroku master</code> を実行し、heroku 上にソースコードを push します</li>
+	<li>clone してきたディレクトリ内で以下を実行し、環境変数を設定します
+		<ul>
+			<li>先の 4. でメモした Token を登録します<br/><code>heroku config:set DISCORD_BOT_TOKEN=NDA0MgAIC0QK18lU0dxMt99F.HuWAIt.Nh9OTLbjxdMp3pcmw3Lsqd4aQlb</code> (トークンはダミーです)</li>
+			<li>利用する BCDice-API サーバの URL を登録します<br/><code>heroku config:set BCDICE_API_URL=http://xxxx.xxxxx.xxxxx.example.com/</code> (URL はダミーです)</li>
+			<li>管理用パスワードを設定します<br/><code>heroku config:set BCDICE_PASSWORD=MY_PASSWORD</code> (MY_PASSWORD を任意の文字列に書き換えてください)</li>
+			<li>オリジナルダイス表を扱えるようにします<br/><code>heroku config:set LANG=ja_JP.UTF-8</code></li>
+		</ul>
+	</li>
+	<li>(必須ではない) 必要に応じて以下の環境変数を設定します。
+		<ul>
+			<li>予備の BCDice-API サーバを登録します。<br/><code>heroku config:set BCDICE_API_SECONDARY=http://xxxx.xxxxx.xxxxx.example.com/</code> (URL はダミーです)</li>
+			<li>どのシステムのダイスボットを使うのか設定していない部屋で利用するダイスボットを設定します。<br/><code>heroku config:set BCDICE_DEFAULT_SYSTEM=DiceBot</code> (DiceBot は任意のシステムに書き換えてください)</li>
+			<li>ダイスを振った時に振った人にメンションを飛ばすようにします。<br/><code>heroku config:set BCDICE_MENTION_MODE=1</code></li>
+			<li>ダイスを振った時の結果にシステム名を添えるようにします。<br/><code>heroku config:set BCDICE_RESULT_DISPLAY_FORMAT=V1</code></li>
+			<li>スラッシュコマンドを有効にします。<br/><code>heroku config:set BCDICE_SLASH_PREFIX=bcdice</code></li>
+			<li>スラッシュコマンドの短縮ワードを有効にします。<br/><code>heroku config:set BCDICE_SLASH_SHORT_PREFIX=br</code></li>
+			<li>スラッシュコマンド以外の手段で設定やダイスロールをできないようにします<br/><code>heroku config:set BCDICE_STANDARD_INPUT_DISABLED=1</code></li>
+			<li>スラッシュコマンド上でオリジナル表をサジェストする機能を無効にします<br/><code>heroku config:set BCDICE_SLASH_TABLE_SUGGESTION_DISABLED=1</code></li>
+		</ul>
+	</li>
+	<li>Heroku の Dashboard から worker を起動します。<br/>Heroku の Dashboard：<a target="_blank" href="https://dashboard.heroku.com/">https://dashboard.heroku.com/</a></li>
+</ol>
+<div class="comment"><a href="https://dinosaur-fossil.hatenablog.com/entry/2020/12/23/001818">https://dinosaur-fossil.hatenablog.com/entry/2020/12/23/001818</a> を参考に記載しています。</div>
+
+<h2 id="contact">連絡先</h2>
+<h3 id="contact-report">バグ報告など</h3>
+<p>Twitter アカウントは<a href="https://twitter.com/Shunshun94">@Shunshun94</a>。ないしはリポジトリに issue を追加してください。</p>
+<h3 id="contact-donate">寄付先</h3>
+<p><a href="http://amzn.asia/8mNqdKy">Amazon のウィッシュリスト</a></p>
+
+<h2 id="licenses">ライセンス</h2>
+
+<h3 id="licenses-libs">使用しているライブラリ</h3>
+<ul>
+	<li>(Eclipse Public License - v 1.0) (GNU Lesser General Public License) Logback Classic Module (ch.qos.logback:logback-classic:1.2.11 - http://logback.qos.ch/logback-classic)</li>
+	<li>(Eclipse Public License - v 1.0) (GNU Lesser General Public License) Logback Core Module (ch.qos.logback:logback-core:1.2.11 - http://logback.qos.ch/logback-core)</li>
+	<li>(Apache License, Version 2.0) xsalsa20poly1305 (com.codahale:xsalsa20poly1305:0.11.0 - https://github.com/codahale/xsalsa20poly1305)</li>
+	<li>(MIT License) minimal-json (com.eclipsesource.minimal-json:minimal-json:0.9.5 - https://github.com/ralfstx/minimal-json)</li>
+	<li>(The Apache Software License, Version 2.0) Jackson-annotations (com.fasterxml.jackson.core:jackson-annotations:2.12.6 - http://github.com/FasterXML/jackson)</li>
+	<li>(The Apache Software License, Version 2.0) Jackson-core (com.fasterxml.jackson.core:jackson-core:2.12.6 - https://github.com/FasterXML/jackson-core)</li>
+	<li>(The Apache Software License, Version 2.0) jackson-databind (com.fasterxml.jackson.core:jackson-databind:2.12.6 - http://github.com/FasterXML/jackson)</li>
+	<li>(The Apache Software License, Version 2.0) com.neovisionaries:nv-websocket-client (com.neovisionaries:nv-websocket-client:2.14 - https://github.com/TakahikoKawasaki/nv-websocket-client)</li>
+	<li>(The Apache Software License, Version 2.0) okhttp-logging-interceptor (com.squareup.okhttp3:logging-interceptor:4.9.3 - https://square.github.io/okhttp/)</li>
+	<li>(The Apache Software License, Version 2.0) okhttp (com.squareup.okhttp3:okhttp:4.9.1 - https://square.github.io/okhttp/)</li>
+	<li>(The Apache Software License, Version 2.0) Okio (com.squareup.okio:okio:2.8.0 - https://github.com/square/okio/)</li>
+	<li>(The Apache Software License, Version 2.0) Vavr (io.vavr:vavr:0.10.4 - http://vavr.io)</li>
+	<li>(The Apache Software License, Version 2.0) Vavr Match (io.vavr:vavr-match:0.10.4 - http://vavr.io)</li>
+	<li>(Eclipse Public License 1.0) JUnit (junit:junit:4.13.2 - http://junit.org)</li>
+	<li>(Apache License, Version 2.0) Apache Commons Lang (org.apache.commons:commons-lang3:3.12.0 - https://commons.apache.org/proper/commons-lang/)</li>
+	<li>(Apache License, Version 2.0) Apache Log4j API (org.apache.logging.log4j:log4j-api:2.17.2 - https://logging.apache.org/log4j/2.x/log4j-api/)</li>
+	<li>(Apache License, Version 2.0) Apache Log4j Core (org.apache.logging.log4j:log4j-core:2.17.2 - https://logging.apache.org/log4j/2.x/log4j-core/)</li>
+	<li>(Bouncy Castle Licence) Bouncy Castle Provider (org.bouncycastle:bcprov-jdk15on:1.60 - http://www.bouncycastle.org/java.html)</li>
+	<li>(New BSD License) Hamcrest Core (org.hamcrest:hamcrest-core:1.3 - https://github.com/hamcrest/JavaHamcrest/hamcrest-core)</li>
+	<li>(Apache License, Version 2.0) Javacord (org.javacord:javacord:3.7.0 - https://javacord.org)</li>
+	<li>(Apache License, Version 2.0) Javacord (api) (org.javacord:javacord-api:3.7.0 - https://javacord.org)</li>
+	<li>(Apache License, Version 2.0) Javacord (core) (org.javacord:javacord-core:3.7.0 - https://javacord.org)</li>
+	<li>(The Apache Software License, Version 2.0) IntelliJ IDEA Annotations (org.jetbrains:annotations:13.0 - http://www.jetbrains.org)</li>
+	<li>(The Apache License, Version 2.0) org.jetbrains.kotlin:kotlin-stdlib (org.jetbrains.kotlin:kotlin-stdlib:1.4.10 - https://kotlinlang.org/)</li>
+	<li>(The Apache License, Version 2.0) org.jetbrains.kotlin:kotlin-stdlib-common (org.jetbrains.kotlin:kotlin-stdlib-common:1.4.0 - https://kotlinlang.org/)</li>
+	<li>(The Apache License, Version 2.0) org.jetbrains.kotlin:kotlin-stdlib-jdk7 (org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.10 - https://kotlinlang.org/)</li>
+	<li>(The Apache License, Version 2.0) org.jetbrains.kotlin:kotlin-stdlib-jdk8 (org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.10 - https://kotlinlang.org/)</li>
+	<li>(MIT License) SLF4J API Module (org.slf4j:slf4j-api:1.7.32 - http://www.slf4j.org)</li>
+</ul>
+
+
+<h3 id="licenses-services">利用しているサービス</h3>
+<dl>
+	<dt><a href="https://github.com/bcdice/BCDice">ゲーム設定型ダイスボット「ボーンズ＆カーズ」</a></dt>
+	<dd>どどんとふを初めとする多くのオンセツールで採用されているダイスボット。略称は BCDice。修正BSDライセンスでライセンスされています。</dd>
+	<dt><a href="https://github.com/NKMR6194/bcdice-api">BCDice-API</a></dt>
+	<dd>BCDice に HTTP による API を付与するラッパ。<a href="https://github.com/NKMR6194/bcdice-api/blob/master/LICENSE">MIT ライセンス</a>でライセンスされています。</dd>
+	<dt><a href="https://discordapp.com/">Discord</a></dt>
+	<dd>ボイスチャットアプリ。パソコンからでも携帯からでも利用可能。</dd>
+</dl>
+
+<h3 id="licenses-thisone">本アプリのライセンス</h3>
+<p>このアプリ (ソースコードなどを含む) は <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GPLv3</a> でライセンスします。<br/>ソースコードは<a href="https://github.com/Shunshun94/discord-bcdicebot">https://github.com/Shunshun94/discord-bcdicebot</a>から入手可能です。</p>
+
+<h2 id="faq">Q&amp;A</h2>
+<h3 id="faq01">質問・バグ報告はどこに</h3>
+<p><a href="https://twitter.com/Shunshun94">@Shunshun94</a> ないしは <a href="https://github.com/Shunshun94/discord-bcdicebot/issues">github の issues</a> に。</p>
+<p>どんな出力が出たのか、出力をコピペして頂けると調査が捗ります。</p>
+<h3 id="faq02">ダイスを振った時にメンションしてほしいんだけど</h3>
+<p>環境変数 <code>BCDICE_MENTION_MODE</code> になんらかの値を入れた状態で bot を起動してください</p>
+<h3 id="faq03">ダイスを振るコマンド以外を入力すると <strong>[ERROR][500] ～</strong> って出る。設定は合っているはずなのに</h3>
+<p>start.bat の <strong>IGNORE_ERROR=0</strong> の 0　を 1 と書き入れてみてください。治るかもしれません</p>
+<h3 id="faq04">管理用のパスワードはどこ？</h3>
+<p>環境変数<code>BCDICE_PASSWORD</code>の値が使われます。<br/>環境変数を指定していない場合は起動直後に <code>Admin Password: SGO7C0XYtBJouE75</code> みたいな文字列がでます。この英数字ランダム16桁の文字列がパスワードです。起動するたびに変わるので注意してください</p>
+<h3 id="faq05">スラッシュコマンドを有効にしてダイスボットを起動したのだけれどもスラッシュコマンドがサジェストされない</h3>
+<p>初回起動時は使えるようになるまで1時間程度かかります。お待ちください</p>
+<h3 id="faq06">Version 2? Version 1 との差異として気を付けるべき点は何？</h3>
+<p>以下について変更が入っています。</p>
+<ul>
+	<li>古いオリジナル表で利用できた help のフォーマットが利用できなくなります。help の際は表の内容を全部出力します</li>
+	<li>BCDice-API v2 の API が有効でないサーバでは利用できません</li>
+</ul>
+<h3 id="faq07">Version 1 を使いたいのだけれども</h3>
+<p><a href="https://github.com/Shunshun94/discord-bcdicebot/releases/download/v1.14.5/discord-bcdicebot.zip">こちら</a>からダウンロードいただけます。ただし今後更新はされません</p>
+<h3 id="faq08">なんで Java なの。Ruby とか○○とかじゃないの</h3>
+<p>一般ユーザの PC に Ruby や○○の実行環境が導入されているとは思えなかった</p>
+<h3 id="faq09">じゃあ単体実行できるバイナリでいいじゃん</h3>
+<p>Mac ユーザやら Linux ユーザやらごとにバイナリを作るのが面倒だった。 Linux はともかく Mac ユーザはいる気がしたから</p>
+
+<h2 id="acknowledgments">謝辞</h2>
+<h3 id="acknowledgments-people">お世話になった方々</h3>
+
+<p>BCDice を作成・公開してくださった<a href="http://faceless-tools.cocolog-nifty.com/about.html">Faceless</a>さんと、
+Ruby 移植をしてくださった<a href="https://twitter.com/torgtaitai">たいたい竹流</a>さん。
+さらにメンテを引き継いでくださっている<a href="https://twitter.com/ysakasin">酒田　シンジ</a>さん。
+そもそも、BCDice が無ければこのアプリは着想すらありませんでした。
+BCDice が多機能である点、2017年現在、国内オンラインセッションツールのデファクトスタンダードであるどどんとふが採用しているダイスボットであるため、
+国内におけるダイスボットのデファクトスタンダードが BCDice となっていたことが実装の必要を感じたそもそもの理由でした。</p>
+
+<p>BCDice-API を実装・公開してくださった<a href="https://twitter.com/ysakasin">酒田　シンジ</a>さん。
+BCDice-API が無ければ本アプリの実装は気が遠くなるものだったに違いありません。</p>
+
+<p>発表前の動作確認に付き合ってくださった<a href="https://twitter.com/_casi_note">かし＊</a>さんと<a href="https://twitter.com/Lillin">離凛</a>さん。
+色々な想定漏れについて指摘していただき、公開前にアプリが大幅に改善されました。</p>
+
+<p>PR や問題の指摘等をくださった<a href="https://twitter.com/ysakasin">酒田　シンジさん</a>、<a href="https://github.com/C0ela">シーラさん</a>、
+<a href="https://github.com/c-ardinal">cardinalさん</a>、<a href="https://twitter.com/ochaochaocha3">おちゃさん</a>、
+<a href="https://github.com/blhsrwznrghfzpr">yoshi さん</a>、<a href="https://twitter.com/Twit_Hiyori">水篠 日和さん</a>。（順番は時期順）
+頂いた PR やご指摘等に基づいて色々と修正や追加機能、利用しやすくするための措置をとれました。</p>
+
+<p>DiscordでDiceBot(BCDice)を使う方法<a href="https://aimsot.net/discord_dicebot/">その1</a>・<a href="https://aimsot.net/discord_dicebot02/">その2</a>を書いてくださった
+<a href="https://twitter.com/aimsssssot">えいむさん</a>。画像つきのかなりわかりやすいガイドを書いて頂き、導入して頂きやすくなりました。</p>
+
+<p>OGP 画像に<a href="https://www.pakutaso.com" >フリー写真素材ぱくたそ </a>の<a href="https://www.pakutaso.com/20121115325post-2147.html">ゾロ目が揃ったサイコロの写真素材</a>（Photo by すしぱく）を用いています。</p>
+
+<h3 id="acknowledgments-relatedApps">関連アプリの紹介</h3>
+<p><a href="https://twitter.com/Nanasu7">Nanasu</a> さんが作ってくださった<a href="https://bitbucket.org/Nanasu/bcdiscord-for-browser">BCDiscord for Browser</a>　のコマンドは本アプリの物を参考にしてくださいました。
+ブラウザのみで動くため、大変に便利です。</p>
+
+
+<h2 id="history">更新履歴</h2>
+<dl id="historyList">
+	<dt>v2.8.1</dt>
+	<dd>URL 形式で設定するオリジナル表のサンプルを追加しました。詳細は<a href="#howToUse-admin-originalTable">オリジナル表の管理</a>をご確認ください</dd>
+	<dt>v2.8.0</dt>
+	<dd>MESSAGE CONTENT INTENT の状態を validate.bat で確認するように変更しました</dd>
+	<dd>オリジナル表をファイル形式だけでなく URL 形式で設定できるようにしました。詳細は<a href="#howToUse-admin-originalTable">オリジナル表の管理</a>をご確認ください</dd>
+	<dt>v2.7.5</dt>
+	<dd>一部ライブラリを最新版に差し替えました</dd>
+	<dt>v2.7.4</dt>
+	<dd>ダイスボットの配布方法を変更しました</dd>
+	<dt>v2.7.3</dt>
+	<dd>ソースコードの一部をメンテナンスしました</dd>
+	<dt>v2.7.2</dt>
+	<dd>Heroku に関する記述を修正しました。アプリの修正はありません</dd>
+	<dt>v2.7.1</dt>
+	<dd>Discord の仕様変更に合わせ、導入手順を修正しました。アプリの修正はありません</dd>
+	<dt>v2.7.0</dt>
+	<dd>スラッシュコマンドからオリジナル表をサジェストするように変更しました。スラッシュコマンドを有効にした場合はデフォルトでサジェストも有効ですが、設定から無効化することも可能です</dd>
+	<dd>スラッシュコマンドから特定のユーザがダイスを振れないように設定する機能を追加しました</dd>
+	<dd>ダイスを複数回振る時の挙動に関する問題を修正しました</dd>
+	<dt>v2.6.5</dt>
+	<dd>シークレットダイスについて挙動がおかしかったので修正しました</dd>
+	<dt>v2.6.4</dt>
+	<dd>一部のコマンドの結果の表示形式を変更しました</dd>
+	<dt>v2.6.3</dt>
+	<dd>内部の挙動を一部修正しました</dd>
+	<dt>v2.6.2</dt>
+	<dd>内部の挙動を一部修正しました</dd>
+	<dt>v2.6.1</dt>
+	<dd>アプリの誤字を修正しました</dd>
+	<dt>v2.6.0</dt>
+	<dd>スラッシュコマンドに対応しました。ただし、現時点ではスラッシュコマンドはデフォルトでは無効です</dd>
+	<dd>各部屋の設定情報を保存するように変更しました。2.6.0にした後、一度 import を実行すれば今後は起動するごとに部屋ごとのシステムの再設定を行う必要はありません</dd>
+	<dt>v2.5.7</dt>
+	<dd>いくつかのライブラリについて更新しました</dd>
+	<dt>v2.5.6</dt>
+	<dd>いくつかのライブラリについて更新しました</dd>
+	<dt>v2.5.5</dt>
+	<dd>いくつかのライブラリについて更新しました</dd>
+	<dt>v2.5.4</dt>
+	<dd>いくつかのライブラリについて更新しました</dd>
+	<dt>v2.5.3</dt>
+	<dd>オリジナルダイスボットを複数回振る際の内部の挙動を変更しました</dd>
+	<dt>v2.5.2</dt>
+	<dd>start.sh を修正しました（<a href="https://github.com/Shunshun94/discord-bcdicebot/pull/121">詳細</a>）。連絡くださった<a href="https://twitter.com/ochaochaocha3">おちゃさん</a>、ありがとうございます！</dd>
+	<dt>v2.5.1</dt>
+	<dd>本ドキュメントのタイポを修正しました</dd>
+	<dt>v2.5.0</dt>
+	<dd>テキストチャットに入力された情報がダイスコマンドか否かのチェックに BCDice が提供している情報を用いるように変更しました</dd>
+	<dd>シークレットダイスの挙動について修正しました。古いシークレットダイスの情報を削除できるようにしました</dd>
+	<dt>v2.4.0</dt>
+	<dd>DiscordでDiceBot(BCDice)を使う方法へのリンクを追加しました。書いてくださった<a href="https://twitter.com/aimsssssot">えいむさん</a>、ありがとうございます！</dd>
+	<dd>導入手順を全体的に修正しました</dd>
+	<dd>validate.bat を追加しました</dd>
+	<dd>環境変数 <code>BCDICE_RESULT_DISPLAY_FORMAT</code> の値が <code>V1</code> の場合、ダイスを振った際にシステム名を付けて結果を表示するように変更</dd>
+	<dt>v2.3.0</dt>
+	<dd>いくつかのライブラリについて更新</dd>
+	<dd><code>2 NotDiceRoll</code>のようなフォーマットの発言を行った際に警告メッセージが暴発する問題に対処しました</dd>
+	<dt>v2.2.3</dt>
+	<dd>一部のダイスを振った結果の表示が崩れる問題に対処しました</dd>
+	<dd>オリジナル表に関する一部挙動を修正しました（<a href="https://github.com/Shunshun94/discord-bcdicebot/issues/91">詳細</a>）。連絡くださった<a href="https://twitter.com/Twit_Hiyori">水篠 日和さん</a>、ありがとうございます！</dd>
+	<dd>管理用の部屋一覧を取得するコマンドの挙動を一部修正しました</dd>
+	<dt>v2.2.2</dt>
+	<dd>自動テストに関連する不備に対処しました（<a href="https://github.com/Shunshun94/discord-bcdicebot/issues/96">詳細</a>）。連絡くださった<a href="https://twitter.com/ochaochaocha3">おちゃさん</a>、ありがとうございます！</dd>
+	<dt>v2.2.1</dt>
+	<dd>start.sh の文字コードが変わっていて正しく機能しなかった問題に対処しました（<a href="https://github.com/Shunshun94/discord-bcdicebot/issues/92">詳細</a>）。連絡くださった<a href="https://twitter.com/ochaochaocha3">おちゃさん</a>、ありがとうございます！</dd>
+	<dt>v2.2.0</dt>
+	<dd>Heroku 上で動かすための設定ファイル Procfile を追加しました。ファイルを共有してくださった yoshi さん、ありがとうございます！（<a href="https://github.com/Shunshun94/discord-bcdicebot/pull/83">詳細</a>）</dd>
+	<dd>Bot が登録されているサーバの情報を取得できるようにしました</dd>
+	<dd>オリジナル表に関する問題をいくらか修正しました</dd>
+	<dt>v2.1.0</dt>
+	<dd>環境変数 <code>BCDICE_MENTION_MODE</code> に何らかの値が入っている場合、ダイスを振った際に振った人にメンションを付けて結果を表示するように変更</dd>
+	<dt>v2.0.2</dt>
+	<dd>bcdice help SYSTEM_NAME がうまく動かない問題を報告いただき、修正しました。h-mikisato さん、ありがとうございます！（<a href="https://github.com/Shunshun94/discord-bcdicebot/issues/79">詳細</a>）</dd>
+	<dd>システム設定のインポート・エクスポートの出力を修正しました</dd>
+	<dd>オリジナル表の繰り返しコマンドについて出力を修正しました</dd>
+	<dt>v2.0.1</dt>
+	<dd>オリジナル表に関する問題を修正しました</dd>
+	<dt>v2.0.0</dt>
+	<dd>BCDice-API 2.0 に対応しました</dd>
+	<dd>コマンド中に全角スペースが含まれている場合、半角スペースとして扱うようにしました</dd>
+	<dt>v1.14.5</dt>
+	<dd>このファイルのタイポを修正頂きました（<a href="https://github.com/Shunshun94/discord-bcdicebot/pull/72">詳細</a>）。<a href="https://github.com/blhsrwznrghfzpr">yoshi さん</a>、ありがとうございます！</dd>
+	<dt>v1.14.4</dt>
+	<dd>利用しているライブラリを更新しました</dd>
+	<dt>v1.14.3</dt>
+	<dd>利用しているライブラリを更新しました</dd>
+	<dd>アプリ内で使っている用語のいくつかを修正しました</dd>
+	<dt>v1.14.2</dt>
+	<dd>ヘルプとマニュアルの修正を実施しました</dd>
+	<dt>v1.14.1</dt>
+	<dd>利用する予定の BCDice API サーバを一覧する機能を追加しました</dd>
+	<dd>利用する予定の BCDice API サーバから特定のサーバを削除する機能を追加しました</dd>
+	<dd>挙動を安定させるために若干修正を加えました</dd>
+	<dd>複数回振る時の挙動に関するバグを修正しました</dd>
+	<dt>v1.14</dt>
+	<dd>オリジナルのダイスボット表にヘルプテキストを追加できるようにしました</dd>
+	<dd>複数回ロールする機能で発生していたいくつかのバグを修正しました</dd>
+	<dd>Discord の API 仕様変更の予定に追随しました</dd>
+	<dt>v1.13.1</dt>
+	<dd>マニュアルを少し修正</dd>
+	<dt>v1.13</dt>
+	<dd>ダイスを一度に複数回振る機能を追加しました</dd>
+	<dd>BCDice API サーバが不調の際に別の BCDice API サーバに自動で切り替える機能を追加しました</dd>
+	<dd>ダイスボットの種類を指定していない際に利用されるデフォルトのダイスボットを指定する機能を追加しました</dd>
+	<dt>v1.12.2</dt>
+	<dd>システムの名称にスペースが入っている場合にダイスボットの設定やコマンドの参照ができない問題を修正しました</dd>
+	<dt>v1.12.1</dt>
+	<dd>ダイスを振る際に接頭語を必要とする設定にしている際、オリジナルのダイスボットについて接頭語の設定が有効になってなかった問題を修正しました</dd>
+	<dt>v1.12</dt>
+	<dd>BCDice-API へのリクエスト送信頻度を下げる機能を追加しました</dd>
+	<dd>管理者がオリジナルのダイスボット表を追加できる機能を追加しました</dd>
+	<dt>v1.11</dt>
+	<dd>たまに BCDice-API へのリクエストが上手くいかない問題に対して対処しました</dd>
+	<dd>パスワードを指定する機能を追加しました</dd>
+	<dt>v1.10</dt>
+	<dd>Linux/macOS 環境向けの起動スクリプトを追加。スクリプトを共有くださった<a href="https://twitter.com/ochaochaocha3">おちゃさん</a>、ありがとうございます！</dd>
+	<dt>v1.9</dt>
+	<dd>ダイスボットのスペルが間違えている時に警告が出ない問題を解消しました</dd>
+	<dt>v1.8.1(2019/07/24)</dt>
+	<dd>本ドキュメントの軽微な修正を実施しました</dd>
+	<dt>v1.8(2019/07/23)</dt>
+	<dd>ダイスコマンドに関するバグを修正しました (<a href="https://github.com/Shunshun94/discord-bcdicebot/issues/13">詳細</a>)。</dd>
+	<dd>管理用コマンドとして BCDice-API の接続先を変更する機能を追加しました</dd>
+	<dd>管理用コマンドとして全部屋に設定されたダイスボット一覧を取得する機能を追加しました</dd>
+	<dd>管理用コマンドとして全部屋にダイスボットを設定する機能を追加しました</dd>
+	<dt>v1.7(2019/06/10)</dt>
+	<dd>bcdice list でダイスボットの一覧が表示されないことがある問題を修正しました</dd>
+	<dt>v1.6(2018/11/11)</dt>
+	<dd>一部のエラーを無視する機能を追加しました。詳しくは上述の <q>ダイスを振るコマンド以外を入力すると <strong>[ERROR][500] ～</strong> って出る。設定は合っているはずなのに</q> を参照してください</dd>
+	<dd>設定用コマンドを一部修正しました</dd>
+	<dt>v1.5(2018/03/24)</dt>
+	<dd>ダイスコマンドに関するバグを修正しました (<a href="https://github.com/Shunshun94/discord-bcdicebot/pull/10">詳細</a>)。問題の指摘と修正手法の共有をしてくださった<a href="https://github.com/c-ardinal">cardinal さん</a>、ありがとうございます！</dd>
+	<dt>v1.4(2017/10/07)</dt>
+	<dd>利用しているライブラリ起因の問題に対してライブラリをバージョンアップして対応しました。問題の指摘をくださった<a href="https://github.com/C0ela">シーラさん</a>、ありがとうございます！</dd>
+	<dd>アプリ終了後に待機するように start.bat を変更しました。ログの収集が容易になりました</dd>
+	<dt>v1.3(2017/07/13)</dt>
+	<dd>Channel 毎に異なるダイスボットを利用できるように変更しました。特に設定していない場合は general のものを利用しています</dd>
+	<dt>v1.2(2017/07/06)</dt>
+	<dd>BCDice-API v0.4.0 に対応しました。問題の指摘をくださった<a href="https://twitter.com/ysakasin">酒田　シンジさん</a>、ありがとうございます！</dd>
+	<dt>v1.1.1(2017/06/30)</dt>
+	<dd>本ドキュメントの権利的な問題に対応しました</dd>
+	<dt>v1.1(2017/06/30)</dt>
+	<dd>いくらかの内部的な問題を修正。機能への変更はありません</dd>
+	<dt>v1.0 (2017/06/26)</dt>
+	<dd>公開</dd>
+</dl>
+<script>
+	const version = document.getElementById('historyList').getElementsByTagName('dt')[0].innerText;
+	const url = `https://github.com/Shunshun94/discord-bcdicebot/releases/download/${version}/discord-bcdicebot.zip`;
+	Array.from(document.getElementsByClassName('download')).forEach((a)=>{
+		a.href = url;
+	});
+</script>
+</body>
+</html>
